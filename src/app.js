@@ -4,7 +4,8 @@ const app = express();
 
 const validateZip = require("./middleware/validateZip")
 
-const morgan = require("morgan");
+const getZoos = require(./utils/getZoos);
+
 
 // Routes
 
