@@ -12,40 +12,42 @@ const morgan = require("morgan");
 // zip parameter
 // const morgan = require("morgan");
 app.get("/check/:zip", validateZip, (req, res, next) => {
-  getZoos(zip)
-    .then((zoos) => {
-      if (zoos.length > 1) {
-        res.send(`${zip} exists in our records.`)
-      } else {
-        res.send(`${zip} does not exist in our records.`)
-      }
-    })
-  next();
+  const zip = req.params.zip;
+  const zoos = getZoos(zip)
+  zoos ? res.send(`${zip} exists in our records`) : res.send(`${zip} does not exist in our records.`)
 })
 
 // Route for /zoos/:zip
 app.get("/zoos/:zip", validateZip, (req, res, next) => {
-  getZoos(zip)
-    .then((zoos) => {
-      if (zoos.length > 1) {
-        res.send(`${zip} zoos: ${zoos}`)
-      } else {
-        res.send(`${zip} has no zoos.`)
-      }
-    })
-  next();
+  const zip = req.params.zip;
+  const zoos = getZoos(zip);
+  if (zoos.length) {
+    res.send(`${zip} zoos: ${zoos.join("; ")}`)
+  } else {
+    res.send(`${zip} has no zoos.`)
+  }
 })
 
 // Route for /zoos/all
 // Requires admin query parameter = true;
-app.get("/zoos/all?admin=true", (req, res, next) => {
-  getZoos()
+app.get("/zoos/all", (req, res, next) => {
+  const admin = req.query.admin === "true";
+  if (!admin) {
+    return res.send("You do not have access to that route")
+  }
+  zoos = getZoos();
+  res.send(`All zoos: ${zoos.join("; ")}`);
 })
 
 
-// Route for error handling
+// Route for handling undefined routes
 app.use((req, res, next) => {
   res.send("That route could not be found!")
+})
+
+// Route for error handling
+app.use((error, req, res, next) => {
+  res.send(error);
 })
 
 module.exports = app
