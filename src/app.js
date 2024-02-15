@@ -15,7 +15,7 @@ const getZoos = require("./utils/getZoos");
 app.get("/check/:zip", validateZip, (req, res, next) => {
   const zip = req.params.zip;
   const zoos = getZoos(zip)
-  zoos ? res.send(`${zip} exists in our records`) : res.send(`${zip} does not exist in our records.`)
+  zoos ? res.send(`${zip} exists in our records.`) : res.send(`${zip} does not exist in our records.`)
 })
 
 // Route for /zoos/all
@@ -23,7 +23,7 @@ app.get("/check/:zip", validateZip, (req, res, next) => {
 app.get("/zoos/all", (req, res, next) => {
   const admin = req.query.admin === "true";
   if (!admin) {
-    return res.status(403).send("You do not have access to that route")
+    return res.status(403).send("You do not have access to that route.")
   }
   const zoos = getZoos();
   res.send(`All zoos: ${zoos.join("; ")}`);
