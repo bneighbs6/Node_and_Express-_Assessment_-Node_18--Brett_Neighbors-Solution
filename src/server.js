@@ -1,5 +1,5 @@
 // create server port
-const {PORT = 8000} = process.env;
+const PORT = 5000
 
 // require express app from app.js
 const app = require("./app")
